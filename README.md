@@ -14,3 +14,6 @@
 * Карина: Структуры: Арена
 * Артур, Тимофей, Никита, Богдан: Боевая система
 * Марк, Дияр, Магамедхабиб, Мирослав, ...: Структуры: интерактивное взаимодействие (ловушки)
+
+Ссылка на задачи:
+https://app.todoist.com/auth/join?invite_code=ks4ACI0R2SBjNGRmMzY3YjhlZGQwZmQzYzExMzdlYmUzMzA2NzMyOA
