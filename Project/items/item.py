@@ -23,6 +23,7 @@ class Item:
     def __str__(self):
         return f"{self.name} [{self.rarity}] (ID: {self.item_id})"
 
+
     def get_info(self) -> str:
         info = (
             f"Название: {self.name}\n"
@@ -33,6 +34,3 @@ class Item:
             info += f"Количество: {self.quantity}/{self.max_stack_size}\n"
         return info
 
-    def use(self, target=None) -> bool:
-        print(f"Предмет '{self.name}' был использован (базовый метод).")
-        return False

@@ -1,3 +1,5 @@
+import random
+
 from . import Item, Rarity
 from typing import Optional, Dict, Tuple
 

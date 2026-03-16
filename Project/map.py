@@ -1,10 +1,14 @@
 import random
+import networkx as nx
+from datetime import datetime, timedelta
+
 
 
 class Map:
     map_array = []
     entity_list = []
-
+    old_path  = None
+    vremy =  datetime.now()
     def __init__(self, width: int, height: int, player_spawn_point: tuple):
         self.player_spawn_point = player_spawn_point
         self.height = height
@@ -75,6 +79,33 @@ class Map:
 
                 self.map_array[y][x2 - 1] = "#" if switch else " "
 
+    def Grah(self,mapi):
+        spisik = []
+        en = {(e.x, e.y) for e in self.entity_list}
+        for y in range(self.height):
+            for x in range(self.width):
+                if mapi[y][x] == " " and (x,y) not  in en :
+                    for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                        nx_, ny_ = x + dx, y + dy
+                        if 0 <= nx_ < self.width and 0 <= ny_ < self.height:
+                            if mapi[ny_][nx_] == " ":
+                                spisik.append(((x, y), (nx_, ny_), 1))
+
+
+        g = nx.Graph()
+        g.add_weighted_edges_from(spisik)
+        return g
+
+    def path(self,map,start, target):
+        try:
+            g = map.Grah(self.map_array)
+            path = nx.dijkstra_path(g, start, target, weight="weight")
+            self.old_path = path
+            return path
+        except nx.NetworkXNoPath:
+            return None
+        except  nx.NodeNotFound:
+            return  None
     def create_door(self, room, room_index):
         x1, y1 = room["x"], room["y"]
         x2, y2 = x1 + room["width"], y1 + room["height"]
@@ -114,9 +145,6 @@ class Map:
 
     def entity_move_desh(self, entity_idx, x, y):
         current_entity = self.entity_list[entity_idx]
-        print("\n===Прыжок===")
-        print(f"Выбор прыговика: {current_entity}")
-
         if x == -1:
             current_entity.direct = [-1, 0]
         elif x == 1:
@@ -127,9 +155,8 @@ class Map:
         elif y == 1:
             current_entity.direct = [0, 1]
 
-
-        print("Прыжок")
         current_entity.add_coords(x, y)
+
 
 
     def generate(self):
@@ -203,7 +230,6 @@ class Map:
         return None
 
     def add_item(self, item):
-        """Добавить предмет на карту"""
         self.item_list.append(item)
 
     def remove_item(self, item):

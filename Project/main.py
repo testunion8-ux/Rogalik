@@ -33,22 +33,22 @@ if __name__ == "__main__":
         main_map.player_spawn_point
     )
     main_map.add_entity(
-        Enemy(10, 7, (0, 0), 10, 3,"d"),
+        Enemy(10, 7, (0, 0), 10, 5,"d"),
         (21, 20),
     )
 
     main_map.add_entity(
-        Enemy(10, 7, (0, 0), 10, 3,"e"),
+        Enemy(10, 7, (0, 0), 10, 5,"e"),
         (22, 20),
     )
 
     main_map.add_entity(
-        Enemy(10, 7, (0, 0), 10, 3,"ъ"),
+        Enemy(10, 7, (0, 0), 10, 5,"ъ"),
         (21, 21),
     )
 
     main_map.add_entity(
-        Enemy(10, 7, (0, 0), 10, 3,"g"),
+        Enemy(10, 7, (0, 0), 10, 5,"g"),
         (23, 20),
     )
 
@@ -64,16 +64,43 @@ if __name__ == "__main__":
 
     # спрайты
     WEAPONS = {
-        "start sword": (3, 0),  # стартовый меч
-        "cool sword": (7, 9),  # крутой меч
-        "axe": (0, 17),  # топор
-        "cool axe": (2, 19),  # крутой топор(лабрис)
-        "machete": (11, 8),  # мачете
+        "start sword": (3, 0),
+        "cool sword": (7, 9),
+        "axe": (0, 17),
+        "cool axe": (2, 19),
+        "machete": (11, 8),
+
+        # ===== МЕЧИ =====
+        "sword_rapira": (0, 0),
+        "sword_sablia": (0, 0),
+        "sword_hope_of_kingdom": (0, 0),
+
+        # ===== ТОПОРЫ =====
+        "axe_one_handed": (0, 0),
+        "axe_two_handed": (0, 0),
+        "axe_bonebreaker": (0, 0),
+
+        # ===== КОСЫ =====
+        "scythe_basic": (0, 0),
+        "scythe_reaper": (0, 0),
+        "scythe_soul_harvester": (0, 0),
     }
 
     POTIONS = {
-        "health": (3, 2),  # красное зелье
-        "speed": (12, 2)  # синее зелье
+        "health": (3, 2),
+        "speed": (12, 2),
+
+        "small_health_potion": (0, 0),
+        "medium_health_potion": (0, 0),
+        "big_health_potion": (3, 2),
+
+        "small_speed_potion": (0, 0),
+        "medium_speed_potion": (0, 0),
+        "big_speed_potion": (0, 0),
+
+        "small_stamina_potion": (0, 0),
+        "medium_stamina_potion": (0, 0),
+        "big_stamina_potion": (12, 2),
     }
 
     weapons_sprites = load_sprites("assets/weapons.png", 16, WEAPONS)
@@ -89,16 +116,6 @@ if __name__ == "__main__":
     # добавляем начальные предметы в инвентарь
     inventory.add_item("Стартовый меч", "start sword", 1)
     inventory.add_item("Зелье здоровья", "health", 3)
-    inventory.add_item("Кожаный шлем")
-    inventory.add_item("Кожаный нагрудник")
-    inventory.add_item("Кожаные поножи")
-    inventory.add_item("Кожаные ботинки")
-    inventory.add_item("Стальной меч", "start sword", 1)
-    inventory.add_item("Зелье скорости", "speed", 2)
-    inventory.add_item("Мачете", "machete", 1)
-    inventory.add_item("Топор дровосека", "axe", 1)
-    inventory.add_item("Лабрис", "cool axe", 1)
-    inventory.add_item("Крутой меч", "cool sword", 1)
 
     # создаем предметы на карте со спрайтами
     map_items_data = [
@@ -129,7 +146,7 @@ if __name__ == "__main__":
     message_timer = 0
     message_color = (255, 255, 255)
 
-    music = BackgroundMusic(volume=0.5)
+    music = BackgroundMusic(volume=0)
 
     print( music.load_music(r"background_music.mp3") )
     # print( music.load_music(r"C:\Users\Student\PycharmProjects\GAME_ФЫФЫФЫф\v001\background_music.mp3") )
@@ -347,9 +364,10 @@ if __name__ == "__main__":
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
                 main_map.get_MC().atack(main_map)
-        # if event.type == pygame.MOUSEBUTTONDOWN:
-        #     if event.button == 2:
-        #         main_map.get_MC().block(main_map)
+        if  event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 3:
+                # print(2)
+                main_map.get_MC().block()
         if keys[pygame.K_LALT] == 1:
             if (datetime.now() - last_gnagatie).total_seconds() > 1 :
                 last_gnagatie = datetime.now()
@@ -363,5 +381,11 @@ if __name__ == "__main__":
             message_color = (255, 200, 100)  # оранжевый
             message_timer = 60
 
+        b =  Map.get_MC(main_map)
+        # if b.blocki ==  False:
+        #     print(9)
+
+        if b.dead:
+            raise Exception("Конец игры")
         # Обработка противников
         manager.tick()
