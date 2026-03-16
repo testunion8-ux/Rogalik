@@ -1,20 +1,21 @@
 import threading
 from .entity import Entity
-from datetime import datetime
-from items import Item
-from typing import List
-
+from datetime import datetime, timedelta
+from map import Map
 
 class Player(Entity):
 
-    def dead(self,enemy):
-        raise Exception("Конец игры")
+
 
     def __init__(self, coordss, cd_stamina, max_stamina):
-        super().__init__(hp=50, speed=5, coords=coordss, damage=5, cd=1, sign="ь", cd_block=0)
+        super().__init__(hp=500, speed=5, coords=coordss, damage=9, cd=1, sign="ь", cd_block=5)
         self.last_cd_stamina = datetime.now()
         self.cd_stamina = cd_stamina
         self.max_stamina = max_stamina
+        self.dead = False
+
+    def dead_player(self):
+        self.dead =  True
 
     def otcat_charactristiki(self, chot_eto, cr):
         if chot_eto == 1:
@@ -48,10 +49,17 @@ class Player(Entity):
         for i in range(1, 4):
             way_x = self.x + self.d_x
             way_y = self.y + self.d_y
-            # enemy = map.get_entity_xy(way_x, way_y)
-            #
-            # if enemy == None:
             if 0 <= way_x < map.width and 0 <= way_y < map.height:
                 if not map.is_empty_struct(way_x, way_y):
                    break
-                map.entity_move_desh(0, (self.d_x), (self.d_y))
+                map.entity_move_desh(0, self.d_x, self.d_y)
+                return None
+            return None
+        return None
+
+    def get_damage_player(self,damage):
+        if self.block :
+            self.cur_hp -= damage
+            if self.cur_hp <= 0:
+                self.dead_player()
+                self.cur_hp = 0

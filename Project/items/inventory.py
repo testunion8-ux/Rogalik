@@ -90,14 +90,46 @@ class Inventory:
             name_lower = name.lower()
             # Словарь соответствий для поиска по ключевым словам
             item_map = {
+
+                # ===== МЕЧИ =====
+                "рапира": "sword_rapira",
+                "сабля": "sword_sablia",
+                "надежда королевства": "sword_hope_of_kingdom",
                 "меч": "start sword",
-                "лабрис": "cool axe",
-                "топор": "cool axe",
-                "зелье здоровья": "health",
-                "зелье скорости": "speed",
-                "мачете": "machete",
                 "крутой меч": "cool sword",
-                "топор дровосека": "axe"
+
+                # ===== ТОПОРЫ =====
+                "одноручный топор": "axe_one_handed",
+                "двуручный топор": "axe_two_handed",
+                "костолом": "axe_bonebreaker",
+                "топор дровосека": "axe",
+                "топор": "cool axe",
+                "лабрис": "cool axe",
+
+                # ===== КОСЫ =====
+                "коса": "scythe_basic",
+                "жнец": "scythe_reaper",
+                "собиратель душ": "scythe_soul_harvester",
+
+                # ===== ЗЕЛЬЯ ЗДОРОВЬЯ =====
+                "маленькое зелье здоровья": "small_health_potion",
+                "среднее зелье здоровья": "medium_health_potion",
+                "большое зелье здоровья": "big_health_potion",
+                "зелье здоровья": "health",
+
+                # ===== ЗЕЛЬЯ СКОРОСТИ =====
+                "маленькое зелье скорости": "small_speed_potion",
+                "среднее зелье скорости": "medium_speed_potion",
+                "большое зелье скорости": "big_speed_potion",
+                "зелье скорости": "speed",
+
+                # ===== ЗЕЛЬЯ ВЫНОСЛИВОСТИ =====
+                "маленькое зелье выносливости": "small_stamina_potion",
+                "среднее зелье выносливости": "medium_stamina_potion",
+                "большое зелье выносливости": "big_stamina_potion",
+
+                # ===== ПРОЧЕЕ =====
+                "мачете": "machete",
             }
 
             # Проходим по словарю и ищем ключевое слово
@@ -165,6 +197,7 @@ class Inventory:
                 else:
                     self.items[index] = (name, sprite, count)
                 return True, message
+            return None
 
         elif "меч" in name_lower or "топор" in name_lower or "лабрис" in name_lower or "мачете" in name_lower:
             message = f"{name}: экипировано"
@@ -175,6 +208,7 @@ class Inventory:
         else:
             message = f"{name}: нельзя использовать"
             return False, message
+
 
     def update_effects(self, player):
         if hasattr(player, 'speed_boost_end'):
@@ -220,9 +254,7 @@ class Inventory:
         pygame.draw.rect(screen, (30, 30, 40), bg_rect)
         pygame.draw.rect(screen, (60, 60, 80), bg_rect, 3)
         font = pygame.font.Font(None, 36)
-        title = font.render("ИНВЕНТАРЬ", True, (255, 255, 200))
-        title_x = self.inventory_x + (self.total_inventory_width - title.get_width()) // 2
-        screen.blit(title, (title_x, self.header_y))
+
 
         # левая панель
         player_box_y = self.player_area_y
@@ -245,7 +277,7 @@ class Inventory:
         pygame.draw.rect(screen, (50, 50, 60), player_rect)
         pygame.draw.rect(screen, (90, 90, 110), player_rect, 2)
         font_char = pygame.font.Font(None, 32)
-        char_symbol = font_char.render("@", True, (50, 150, 255))
+        char_symbol = font_char.render("ь", True, (50, 150, 255))
         char_x = player_slot_x + (self.armor_cell_size - char_symbol.get_width()) // 2
         char_y = player_slot_y + (self.armor_cell_size - char_symbol.get_height()) // 2
         screen.blit(char_symbol, (char_x, char_y))

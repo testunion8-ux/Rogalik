@@ -1,43 +1,59 @@
-from fileinput import close
 
+import  random
 from .enemy import Enemy
-
+from  datetime import *
+from  .player import Player
 
 class EnemyManager:
+    zaebzlo =  datetime.now()
+    path =  None
+
+
     def __init__(self, map):
         self.map = map
-
+        self.old_position = (Player.x,Player.y)
     def tick(self):
         MC = self.map.get_MC()
-
-        # Ищем врагов в списке
         for idx, entity in enumerate(self.map.entity_list):
-            if isinstance(entity, Enemy):
-                # Получаем расстояние от моба до игрока
-                dist = entity.get_dist(MC)
-                current_entity = self.map.entity_list[idx]
-                # print(f"{entities.sign}: {entities.coords}")
-                if dist <= entity.devil_trigger:
-                    # Двигаем их на игрока
-                    norm = MC.get_normalize(entity)
-                    self.map.entity_move(idx, round(norm[0]), round(norm[1]))
 
-                if dist <= entity.trigger_damage and current_entity != 12 :
-                    # Двигаем их на игрокаssssss
-                    current_entity.atack(self.map)
+            if not isinstance(entity, Enemy):
+                continue
+
+            dist, start, target = entity.get_dist(MC)
+
+            if dist <= entity.devil_trigger:
+                if MC != self.old_position:
+                    path = self.map.path(self.map, start, target)
+
+                if (entity.max_hp * 0.3) >= entity.cur_hp:
+
+                    if random.randint(1,5) <=5:
+                        if path and len(path) > 1:
+                            a, b = path[1]
+                            x = a - entity.x
+                            y = b - entity.y
+                            self.map.entity_move(idx, x, y)
 
 
-    def attack_Player(self):
-        # как то определ
-                MC = self.map.get_MC()
+                    else:
+                        if path and len(path) > 1:
+                            a, b = path[1]
+                            x = a - entity.x
+                            y = b - entity.y
+                            if dist > 1:
+                                self.map.entity_move(idx, x, y)
 
-                # Ищем врагов в списке
-                for idx, entity in enumerate(self.map.entity_list):
-                    if isinstance(entity, Enemy):
-                        # Получаем расстояние от моба до игрока
-                        dist = entity.get_dist(MC)
-                        # print(f"{entities.sign}: {entities.coords}")
+                            if dist <= entity.trigger_damage:
+                                Enemy.atack(self.map.entity_list[idx], self.map)
+
+                else:
+                    if path and len(path) > 1:
+                        a, b = path[1]
+                        x = a - entity.x
+                        y = b - entity.y
+                        if dist > 1:
+                            self.map.entity_move(idx, x, y)
+
                         if dist <= entity.trigger_damage:
-                            # Двигаем их на игрока
-                            entity.atack(MC)
+                            Enemy.atack(self.map.entity_list[idx], self.map)
 
