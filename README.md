@@ -16,5 +16,4 @@
 * Марк, Дияр, Магамедхабиб, Мирослав, ...: Структуры: интерактивное взаимодействие (ловушки)
 
 Ссылка на задачи:
-https://app.todoist.com/auth/join?invite_code=ks4ACI0R2SBjNGRmMzY3YjhlZGQwZmQzYzExMzdlYmUzMzA2NzMyOA
 https://app.todoist.com/app/project/igrovoy-proekt-6g9Q7PrfcXp3jFcF
