@@ -32,6 +32,11 @@ if __name__ == "__main__":
     if player_spawn is None:
         raise Exception("Нет места для игрока!")
 
+    main_map.add_entity(
+        Player((0, 0), 5, 5),
+        main_map.player_spawn_point
+    )
+
     enemy_params = [
         (10, 7, (0, 0), 10, 3, "d"),
         (10, 7, (0, 0), 10, 3, "e"),
@@ -39,16 +44,13 @@ if __name__ == "__main__":
         (10, 7, (0, 0), 10, 3, "g"),
     ]
 
-    main_map.add_entity(
-        Enemy(10, 7, (0, 0), 10, 3,"ъ"),
-        (21, 21),
-    )
-
-    main_map.add_entity(
-        Enemy(10, 7, (0, 0), 10, 3,"g"),
-        (23, 20),
-    )
-
+    for params in enemy_params:
+        pos = main_map.get_random_free_cell()
+        if pos:
+            main_map.add_entity(Enemy(*params), pos)
+        else:
+            print("Недостаточно места для врага")
+            break
 
     # Инициализация pygame
     pygame.init()
@@ -152,7 +154,7 @@ if __name__ == "__main__":
         for y in range(main_map.height):
             for x in range(main_map.width):
                 if frame[y][x] == "#":
-                    screen.blit(wall_img, (x * EL_SIZE, y * EL_SIZE + GUI_TOP_SIZE))
+                    screen.blit(wall_img, (x * EL_SIZE + 10, y * EL_SIZE + 6 + GUI_TOP_SIZE))
                 else:
                     color = (255, 255, 255)
                     if frame[y][x] == "ъ":
