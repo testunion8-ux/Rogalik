@@ -209,6 +209,7 @@ class Inventory:
             message = f"{name}: нельзя использовать"
             return False, message
 
+
     def update_effects(self, player):
         if hasattr(player, 'speed_boost_end'):
             if datetime.now() > player.speed_boost_end:

@@ -3,7 +3,6 @@ from . import Rarity
 
 class Consumable(Item):
     """Класс для расходуемых предметов"""
-
     def __init__(
             self,
             item_id: str,
