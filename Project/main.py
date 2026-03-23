@@ -132,10 +132,17 @@ if __name__ == "__main__":
     # print( music.load_music(r"C:\Users\Student\PycharmProjects\GAME_ФЫФЫФЫф\v001\background_music.mp3") )
     music.play()
 
+    floor_img = pygame.image.load("assets/пол.png")
+    wall_img = pygame.image.load("assets/Стены.png")
+    floor_img = pygame.transform.scale(floor_img, (EL_SIZE, EL_SIZE))
+    wall_img = pygame.transform.scale(wall_img, (EL_SIZE, EL_SIZE))
+
     # Основной игровой цикл
     while True:
         # Заливка
-        screen.fill((0, 0, 0))
+        for y in range(main_map.height):
+            for x in range(main_map.width):
+                screen.blit(floor_img, (x * EL_SIZE, y * EL_SIZE + GUI_TOP_SIZE))
 
         # Получение текущего кадра карты
         frame = main_map.render()
@@ -145,9 +152,7 @@ if __name__ == "__main__":
         for y in range(main_map.height):
             for x in range(main_map.width):
                 if frame[y][x] == "#":
-                    # Рисуем квадрат
-                    pygame.draw.rect(screen, (100, 100, 100),
-                                     [x * EL_SIZE, y * EL_SIZE + GUI_TOP_SIZE, EL_SIZE, EL_SIZE])
+                    screen.blit(wall_img, (x * EL_SIZE, y * EL_SIZE + GUI_TOP_SIZE))
                 else:
                     color = (255, 255, 255)
                     if frame[y][x] == "ъ":
