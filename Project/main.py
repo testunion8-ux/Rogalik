@@ -31,10 +31,6 @@ if __name__ == "__main__":
     player_spawn = main_map.get_random_free_cell()
     if player_spawn is None:
         raise Exception("Нет места для игрока!")
-    main_map.add_entity(
-        Player((0, 0), 5, 5),
-        player_spawn
-    )
 
     enemy_params = [
         (10, 7, (0, 0), 10, 3, "d"),
