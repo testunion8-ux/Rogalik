@@ -1,7 +1,7 @@
-from . import Item
+#rom . import Item as I
 from . import Rarity
 
-class Consumable(Item):
+class Consumable(I):
     """Класс для расходуемых предметов"""
     def __init__(
             self,

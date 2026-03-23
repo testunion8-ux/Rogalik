@@ -5,6 +5,7 @@ from .rarity import Rarity
 from .weapon import Weapon
 from .armor import Armor
 from .consumable import Consumable
+from .inventory_renderer import InventoryRenderer
 
 
 SWORDS = [

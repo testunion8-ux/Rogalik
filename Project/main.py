@@ -4,7 +4,7 @@ from entities import Enemy, EnemyManager
 import pygame
 from entities.player import Player
 from BackMusic import BackgroundMusic
-from items import MapItem, Item, Inventory
+from items import MapItem, Item, Inventory, InventoryRenderer, SWORDS, HEALTH_POTIONS, SPEED_POTIONS
 from sprites import load_sprites
 import random
 
@@ -82,44 +82,42 @@ if __name__ == "__main__":
     all_sprites.update(weapons_sprites)
     all_sprites.update(potions_sprites)
 
-    # инвентарь
-    inventory = Inventory(screen_width, screen_height, all_sprites)
+    # Связываем спрайты с icon_path предметов
+    all_sprites["icons/weapons/swords/rapira.png"] = weapons_sprites.get("start sword")
+    all_sprites["icons/potions/health_potion_small.png"] = potions_sprites.get("health")
+    all_sprites["icons/potions/speed_potion_small.png"] = potions_sprites.get("speed")
 
-    # добавляем начальные предметы в инвентарь
-    inventory.add_item("Стартовый меч", "start sword", 1)
-    inventory.add_item("Зелье здоровья", "health", 3)
-    inventory.add_item("Кожаный шлем")
-    inventory.add_item("Кожаный нагрудник")
-    inventory.add_item("Кожаные поножи")
-    inventory.add_item("Кожаные ботинки")
-    inventory.add_item("Стальной меч", "start sword", 1)
-    inventory.add_item("Зелье скорости", "speed", 2)
-    inventory.add_item("Мачете", "machete", 1)
-    inventory.add_item("Топор дровосека", "axe", 1)
-    inventory.add_item("Лабрис", "cool axe", 1)
-    inventory.add_item("Крутой меч", "cool sword", 1)
 
-    # создаем предметы на карте со спрайтами
+    inventory = Inventory()
+
+    # Добавляем стартовые предметы через объекты
+    inventory.add_item(SWORDS[0])  # Рапира
+    inventory.add_item(HEALTH_POTIONS[0])  # Маленькое зелье здоровья x3
+    inventory.add_item(HEALTH_POTIONS[0])
+    inventory.add_item(HEALTH_POTIONS[0])
+    inventory.add_item(SPEED_POTIONS[0])  # Маленькое зелье скорости x2
+    inventory.add_item(SPEED_POTIONS[0])
+
+    # Рендерер инвентаря
+    renderer = InventoryRenderer(
+        screen_width=screen_width,
+        screen_height=screen_height,
+        sprites_dict=all_sprites
+    )
+
+    # Предметы на карте
     map_items_data = [
-        {"name": "Крутой меч", "sprite_key": "start sword"},
-        {"name": "Зелье здоровья", "sprite_key": "health"},
-        {"name": "Лабрис", "sprite_key": "cool axe"},
-        {"name": "Зелье скорости", "sprite_key": "speed"},
-        {"name": "Мачете", "sprite_key": "machete"},
+        SWORDS[0],  # Рапира
+        HEALTH_POTIONS[0],  # Зелье здоровья
+        SPEED_POTIONS[0],  # Зелье скорости
     ]
 
-    for item_data in map_items_data:
+    for item in map_items_data:
         x = random.randint(2, main_map.width - 3)
         y = random.randint(2, main_map.height - 3)
-        # Не ставим на игрока
-        if x == main_map.player_spawn_point[0] and y == main_map.player_spawn_point[1]:
+        if (x, y) == main_map.player_spawn_point:
             continue
-
-        # Создаем объект Item
-        item_obj = Item(name=item_data["name"])
-
-        map_item = MapItem(item_obj, x, y, all_sprites)
-        main_map.item_list.append(map_item)
+        main_map.item_list.append(MapItem(item, x, y, all_sprites))
 
     clock = pygame.time.Clock()
 
@@ -229,7 +227,7 @@ if __name__ == "__main__":
         screen.blit(text_surfac, (10, 20))
 
         # Отрисовка инвентаря (теперь передаем player)
-        inventory.draw(screen, player)
+        renderer.draw(screen, inventory, player)
 
         # Отображение сообщения на экране
         if message_timer > 0:
