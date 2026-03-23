@@ -28,29 +28,28 @@ if __name__ == "__main__":
     screen_height = main_map.height * EL_SIZE + GUI_TOP_SIZE + 50  # +50 для инвентаря
     screen = pygame.display.set_mode((screen_width, screen_height))
 
+    player_spawn = main_map.get_random_free_cell()
+    if player_spawn is None:
+        raise Exception("Нет места для игрока!")
     main_map.add_entity(
-        Player((0,0),5,5),
-        main_map.player_spawn_point
-    )
-    main_map.add_entity(
-        Enemy(10, 7, (0, 0), 10, 5,"d"),
-        (21, 20),
-    )
-
-    main_map.add_entity(
-        Enemy(10, 7, (0, 0), 10, 5,"e"),
-        (22, 20),
+        Player((0, 0), 5, 5),
+        player_spawn
     )
 
-    main_map.add_entity(
-        Enemy(10, 7, (0, 0), 10, 5,"ъ"),
-        (21, 21),
-    )
+    enemy_params = [
+        (10, 7, (0, 0), 10, 3, "d"),
+        (10, 7, (0, 0), 10, 3, "e"),
+        (10, 7, (0, 0), 10, 3, "ъ"),
+        (10, 7, (0, 0), 10, 3, "g"),
+    ]
 
-    main_map.add_entity(
-        Enemy(10, 7, (0, 0), 10, 5,"g"),
-        (23, 20),
-    )
+    for params in enemy_params:
+        pos = main_map.get_random_free_cell()
+        if pos:
+            main_map.add_entity(Enemy(*params), pos)
+        else:
+            print("Недостаточно места для врага")
+            break
 
 
     # Инициализация pygame

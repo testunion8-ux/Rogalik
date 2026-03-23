@@ -252,3 +252,13 @@ class Map:
                 return entity
 
         return None
+
+    def get_random_free_cell(self):
+        free_cells = []
+        for y in range(self.height):
+            for x in range(self.width):
+                if self.map_array[y][x] == " " and self.get_entity_xy(x, y) is None:
+                    free_cells.append((x, y))
+        if not free_cells:
+            return None
+        return random.choice(free_cells)
